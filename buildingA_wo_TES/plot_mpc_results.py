@@ -35,7 +35,7 @@ if "DYMOLA_RUNTIME_LICENSE" not in os.environ:
 hvac = load_fmu("modelica_model/wrapped_fixed_modified_ecoRet09_02162023.fmu")
 
 # if DoS attack on core VAV, set the following flag to True
-dos_attack_core_VAV = True # False
+dos_attack_core_VAV = False # True # False
 
 # if False data intrusion attack on VAV Tsup measurement, set the following flag to True
 compensator = False # True
