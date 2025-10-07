@@ -1,0 +1,13 @@
+{
+  "energy": 127.60994051555801,
+  "energy_cost": 30.950157368458278,
+  "max_temp_violation": 1.6502754894898999,
+  "total_temp_violation": 22.659729078287285,
+  "core_Zone_temp_violation": 1.5749995332346174,
+  "east_Zone_temp_violation": 3.4979985443797545,
+  "north_Zone_temp_violation": 2.002245988584818,
+  "south_Zone_temp_violation": 8.715512644516778,
+  "west_Zone_temp_violation": 6.868972367571317,
+  "high_price_period_load": 117.81955440560887,
+  "low_price_period_load": 9.79038610994914
+}
