@@ -96,7 +96,7 @@ class mpc_case():
 
         # zone temperature bounds - need check with the high-fidelty model
         T_upper = np.array([30.0 for i in range(24)])
-        T_upper[self.occ_start:self.occ_end] = 24.0 # 26.0
+        T_upper[self.occ_start:self.occ_end] = 24.0 # used to be 26.0, HIL for 24.0 C
         T_lower = np.array([18.0 for i in range(24)])
         T_lower[self.occ_start:self.occ_end] = 20.0 # 22.0
 

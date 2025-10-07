@@ -1,11 +1,1 @@
-{
-  "energy": 104.0302465524841,
-  "energy_cost": 26.153300921087943,
-  "max_temp_violation": 0.45493364233038847,
-  "total_temp_violation": 1.2083563354277373,
-  "core_Zone_temp_violation": 0.0,
-  "east_Zone_temp_violation": 0.05655041533130145,
-  "north_Zone_temp_violation": 0.13966662180800427,
-  "south_Zone_temp_violation": 0.19267091179011686,
-  "west_Zone_temp_violation": 0.8194683864983148
-}
+{"energy": 192.8810844439578, "energy_cost": 51.48603290823063, "max_temp_violation": 0.0, "total_temp_violation": 0.0, "core_Zone_temp_violation": 0.0, "east_Zone_temp_violation": 0.0, "north_Zone_temp_violation": 0.0, "south_Zone_temp_violation": 0.0, "west_Zone_temp_violation": 0.0}

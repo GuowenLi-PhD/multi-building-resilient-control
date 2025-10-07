@@ -345,7 +345,7 @@ def run_compensator_mpc(measurements, Z, compensator, targets, model):
 ### Load FMU
 ## ============================================================
 # set attack type
-dos_attack_core_VAV = False #True # True: DoS attack on core zone VAV box; False: No attack
+dos_attack_core_VAV = True # True: DoS attack on core zone VAV box; False: No attack
 compensator = False # True: data intrusion attack on VAV Tsup measurement with compensator
 
 # Set the environment variable for the Dymola license
