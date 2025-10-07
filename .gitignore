@@ -1,3 +1,15 @@
+# IDE/project files
+.vscode/
+.idea/
+.DS_Store
+
+# Modelica files
+*.mat
+*.mos
+*.dslog
+*.log
+*.dcm
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
