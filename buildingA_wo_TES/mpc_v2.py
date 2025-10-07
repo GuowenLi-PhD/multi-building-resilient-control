@@ -36,7 +36,7 @@ class mpc_case():
         self.u_ub = [1, 1, 10, 29.4, 18, 4.5, 0.90, 0.95, 0.95, 0.70, 0.1]
         self.u_start = [0, 0, 10, 23, 18, 0.23, 0.05, 0.05, 0.05, 0.04, 0.1]*PH # total number of 10 control variables and 1 slack variable (10+1) for each step
         self.number_inputs = 11
-        self.w = [1., 1., 100.]  # weights in objective function: : Minimize energy cost + slack variable + action change rate
+        #self.w = [1., 1., 100.]  # default weights in objective function: : Minimize energy cost + slack variable + action change rate
         self.x_opt_0 = self.u_lb   # initialization of previous control actions
 
         # initialize mpc model parameter
@@ -58,9 +58,39 @@ class mpc_case():
                            'north': 0,
                            'south': 0,
                            'west': 0}
-
-        # if dos attack happens on core zone VAV box, change the upper and lower bounds of core zone air flow rate
+     
+        # ============================================================
+        # ADAPTIVE MPC: Attack-aware weight configuration
+        # ============================================================
         self.dos_attack_core_VAV = dos_attack_core_VAV
+        
+        if self.dos_attack_core_VAV:
+            # RESILIENT MODE: Prioritize thermal comfort over energy cost
+            # Remove energy cost term (w[0]=0), increase comfort penalty weight
+            self.w = [0., 100., 10.]  # [energy_cost, slack, slew_rate]
+            print("\n" + "="*80)
+            print("⚠️  ADAPTIVE MPC ACTIVATED - DoS Attack Detected on Core Zone VAV")
+            print("="*80)
+            print("Control Strategy Reconfigured:")
+            print("  - Energy cost weight:     1.0  →  0.0   (DISABLED)")
+            print("  - Comfort penalty weight: 1.0  →  100.0 (PRIORITY)")
+            print("  - Slew rate weight:       100.0 → 10.0  (RELAXED)")
+            print("  - Core zone airflow:      [0.23, 2.80] → [0.00, 0.01] m³/s (FROZEN)")
+            print("  - Adjacent zones:         FULL AUTHORITY for compensatory control")
+            print("="*80 + "\n")
+        else:
+            # NOMINAL MODE: Balance energy efficiency and comfort
+            self.w = [1., 1., 100.]  # [energy_cost, slack, slew_rate]
+            print("\n" + "="*80)
+            print("✓ NOMINAL MPC MODE - Normal Operation")
+            print("="*80)
+            print("Control Strategy:")
+            print("  - Energy cost weight:     1.0   (Balanced)")
+            print("  - Comfort penalty weight: 1.0   (Balanced)")
+            print("  - Slew rate weight:       100.0 (Smooth control)")
+            print("="*80 + "\n")
+        
+        self.x_opt_0 = self.u_lb        
 
     def optimize(self):
         time = self.time
