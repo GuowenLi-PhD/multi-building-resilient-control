@@ -5,13 +5,14 @@
 This framework implements a **three-layer hierarchical Model Predictive Control (MPC)** system for coordinating multiple buildings to achieve cyber-resilience and grid-interactive operation.
 
 ### System Architecture
+```text
 ┌─────────────────────────────────────────────────────────────┐
-│                    AGGREGATOR (Upper Level)                  │
+│                    AGGREGATOR (Upper Level)                 │
 │  - Allocates power budgets to buildings                     │
 │  - Enforces feeder constraints                              │
 │  - Coordinates attack response                              │
-└────────────┬────────────────────────┬───────────────────────┘
-│                        │
+└──────┬────────────────────────┬─────────────────────────────┘
+       │                        │
 ┌──────▼──────┐          ┌──────▼──────┐
 │ Building A  │          │ Building B  │
 │ (Victim)    │◄────────►│ (Support)   │
@@ -20,6 +21,7 @@ This framework implements a **three-layer hierarchical Model Predictive Control 
 │ ARX Models  │          │ ANN Models  │
 │ IPOPT       │          │ DEAP (GA)   │
 └─────────────┘          └─────────────┘
+```
 
 ## Features
 
