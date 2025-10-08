@@ -2,7 +2,7 @@
 Main execution script for hierarchical multi-building resilient control
 
 Author: Guowen Li, AI Assistant
-Date: 2025-01-07
+Date: 2025-10-07
 """
 
 import sys
@@ -12,9 +12,18 @@ from pvlib.iotools import read_epw
 import argparse
 import yaml
 
-# Add module paths
-sys.path.append(os.path.dirname(__file__))
+# CRITICAL FIX: Add the parent directory to Python path
+# This allows imports to work correctly
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+    print(f"🔧 Current directory added to path: {current_dir}")
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
+    print(f"🔧 Parent directory added to path: {parent_dir}")
 
+# Now import local modules (using absolute imports)
 from simulation.coordinator import HierarchicalCoordinator
 import logging
 
@@ -69,7 +78,7 @@ def load_price_data(dt: float = 900.0, n_days: int = 2):
     ]
     
     # Repeat for n_days
-    price_hourly = price_tou_24h * n_days
+    price_hourly = price_tou_24h * (n_days + 1)  # Extra day for forecast
     
     # Interpolate to timestep
     nsteps_per_hour = int(3600 / dt)
@@ -108,27 +117,43 @@ def main():
     logger.info("="*80)
     
     # Load configuration
-    with open(args.config, 'r') as f:
-        config = yaml.safe_load(f)
+    try:
+        with open(args.config, 'r') as f:
+            config = yaml.safe_load(f)
+    except FileNotFoundError:
+        logger.error(f"❌ Configuration file not found: {args.config}")
+        logger.error("   Please ensure config/system_config.yaml exists")
+        return 1
     
     # Calculate simulation times
     t_start = args.start_day * 24 * 3600  # Convert day to seconds
     t_end = t_start + args.duration_days * 24 * 3600
     
     # Load weather data
-    weather_data = load_weather_data(
-        weather_file=args.weather,
-        dt=config['timing']['aggregator_timestep']
-    )
+    try:
+        weather_data = load_weather_data(
+            weather_file=args.weather,
+            dt=config['timing']['aggregator_timestep']
+        )
+    except FileNotFoundError:
+        logger.error(f"❌ Weather file not found: {args.weather}")
+        logger.error("   Please check the path to the EPW file")
+        return 1
     
     # Load price data
     price_data = load_price_data(
         dt=config['timing']['aggregator_timestep'],
-        n_days=args.duration_days + 1  # Extra day for forecast
+        n_days=args.duration_days + 1
     )
     
     # Initialize coordinator
-    coordinator = HierarchicalCoordinator(config_path=args.config)
+    try:
+        coordinator = HierarchicalCoordinator(config_path=args.config)
+    except Exception as e:
+        logger.error(f"❌ Failed to initialize coordinator: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
     
     # Run simulation
     try:
@@ -148,12 +173,19 @@ def main():
         logger.error("="*80)
         logger.error(f"❌ SIMULATION FAILED: {str(e)}")
         logger.error("="*80)
-        raise
+        import traceback
+        traceback.print_exc()
+        return 1
     
     finally:
         # Cleanup
-        coordinator.building_a.shutdown()
-        coordinator.building_b.shutdown()
+        try:
+            coordinator.building_a.shutdown()
+            coordinator.building_b.shutdown()
+        except:
+            pass
+    
+    return 0
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

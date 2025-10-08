@@ -12,13 +12,23 @@ import pandas as pd
 from typing import Dict, List, Optional
 import logging
 
+# Add parent directories to path for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+    print(f"🔧 Current directory added to path: {current_dir}")
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
+    print(f"🔧 Parent directory added to path: {parent_dir}")
+
 # Add Building B path
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../buildingB_w_TES'))
 
 from pyfmi import load_fmu
 from mpc_dnn import mpc_case
-from .base_building import BaseBuilding
-from ..communication.data_models import (
+from buildings.base_building import BaseBuilding
+from communication.data_models import (
     BuildingState, BuildingBState, AggregatorCommand,
     BuildingStatus, ControlMode
 )

@@ -13,16 +13,27 @@ import logging
 from datetime import datetime
 import os
 
-from ..buildings.building_a_interface import BuildingAInterface
-from ..buildings.building_b_interface import BuildingBInterface
-from ..aggregator.aggregator_mpc import AggregatorMPC, AggregatorMPCConfig
-from ..aggregator.attack_anticipator import AttackAnticipator, AttackPrediction
-from ..communication.message_protocol import MessageBroker
-from ..communication.data_models import (
+import sys
+# Add parent directories to path for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+    print(f"🔧 Current directory added to path: {current_dir}")
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
+    print(f"🔧 Parent directory added to path: {parent_dir}")
+
+from buildings.building_a_interface import BuildingAInterface
+from buildings.building_b_interface import BuildingBInterface
+from aggregator.aggregator_mpc import AggregatorMPC, AggregatorMPCConfig
+from aggregator.attack_anticipator import AttackAnticipator, AttackPrediction
+from communication.message_protocol import MessageBroker
+from communication.data_models import (
     AggregatorCommand, AggregatorCommandBuildingB, FeederStatus,
     BuildingStatus, ControlMode
 )
-from .metrics_collector import MetricsCollector
+from simulation.metrics_collector import MetricsCollector
 
 logging.basicConfig(
     level=logging.INFO,

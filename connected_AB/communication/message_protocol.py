@@ -9,10 +9,20 @@ import json
 import logging
 from typing import Dict, Any, Optional
 from dataclasses import asdict
-from .data_models import (
-    BuildingState, AggregatorCommand, FeederStatus, 
-    BuildingStatus, ControlMode
-)
+
+import sys
+import os
+# Add parent directories to path for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+    print(f"🔧 Current directory added to path: {current_dir}")
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
+    print(f"🔧 Parent directory added to path: {parent_dir}")
+
+from communication.data_models import BuildingState, AggregatorCommand, FeederStatus
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

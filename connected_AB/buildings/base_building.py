@@ -14,7 +14,16 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../buildingA_wo_TES'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../buildingB_w_TES'))
 
-from ..communication.data_models import BuildingState, AggregatorCommand
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+    print(f"🔧 Current directory added to path: {current_dir}")
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
+    print(f"🔧 Parent directory added to path: {parent_dir}")
+
+from communication.data_models import BuildingState, AggregatorCommand
 
 class BaseBuilding(ABC):
     """Abstract base class for building controllers"""
