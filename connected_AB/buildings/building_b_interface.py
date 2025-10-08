@@ -62,6 +62,23 @@ class BuildingBInterface(BaseBuilding):
         self.states = None
         self.predictor = None
         
+        # Store model paths
+        building_b_base = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)),
+            '..',
+            'buildingB_w_TES'
+        )
+        
+        self.model_paths = {
+            'core': os.path.join(building_b_base, "system_identification/dnn_model_core_temperature.h5"),
+            'east': os.path.join(building_b_base, "system_identification/dnn_model_east_temperature.h5"),
+            'north': os.path.join(building_b_base, "system_identification/dnn_model_north_temperature.h5"),
+            'south': os.path.join(building_b_base, "system_identification/dnn_model_south_temperature.h5"),
+            'west': os.path.join(building_b_base, "system_identification/dnn_model_west_temperature.h5"),
+            'SOC': os.path.join(building_b_base, "system_identification/dnn_SOC_model.h5"),
+            'power': os.path.join(building_b_base, "system_identification/dnn_power_model.h5")
+        }
+        
     def initialize(self, initial_conditions: Dict):
         """Initialize Building B FMU and MPC"""
         
@@ -131,6 +148,9 @@ class BuildingBInterface(BaseBuilding):
         )
         
         self.current_time = t_start
+        
+        # Store model paths in MPC instance
+        self.mpc.model_paths = self.model_paths
         
         logger.info(f"✓ Building B initialized: SOC={self.SOC_current:.2f}, TES={self.mIce_max:.0f}kg")
     

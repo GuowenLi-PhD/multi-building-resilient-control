@@ -154,13 +154,25 @@ class mpc_case():
         P_his_meas_k = [Tz for Tz in P_his_meas]
 
         # load dnn models
-        core_model_path="system_identification/dnn_model_core_temperature.h5"
-        east_model_path="system_identification/dnn_model_east_temperature.h5"
-        north_model_path="system_identification/dnn_model_north_temperature.h5"
-        south_model_path="system_identification/dnn_model_south_temperature.h5"
-        west_model_path="system_identification/dnn_model_west_temperature.h5"
-        SOC_dnn = self.SOC_dnn_tensorflow()
-        power_dnn = self.power_dnn_tensorflow()
+        # Check if model paths were provided
+        if hasattr(self, 'model_paths'):
+            core_model_path = self.model_paths['core']
+            east_model_path = self.model_paths['east']
+            north_model_path = self.model_paths['north']
+            south_model_path = self.model_paths['south']
+            west_model_path = self.model_paths['west']
+            SOC_model_path = self.model_paths['SOC']
+            power_model_path = self.model_paths['power']
+        else:
+            core_model_path="system_identification/dnn_model_core_temperature.h5"
+            east_model_path="system_identification/dnn_model_east_temperature.h5"
+            north_model_path="system_identification/dnn_model_north_temperature.h5"
+            south_model_path="system_identification/dnn_model_south_temperature.h5"
+            west_model_path="system_identification/dnn_model_west_temperature.h5"
+            SOC_model_path="system_identification/dnn_SOC_model.h5"
+            power_model_path="system_identification/dnn_power_model.h5"
+        SOC_dnn = self.SOC_dnn_tensorflow(SOC_model_path)
+        power_dnn = self.power_dnn_tensorflow(power_model_path)
         core_temp_dnn = self.temp_dnn_tensorflow(core_model_path)
         east_temp_dnn = self.temp_dnn_tensorflow(east_model_path)
         north_temp_dnn = self.temp_dnn_tensorflow(north_model_path)
@@ -690,13 +702,25 @@ class mpc_case():
         P_his_meas_k = [Tz for Tz in P_his_meas]
 
         # load dnn models
-        core_model_path="system_identification/dnn_model_core_temperature.h5"
-        east_model_path="system_identification/dnn_model_east_temperature.h5"
-        north_model_path="system_identification/dnn_model_north_temperature.h5"
-        south_model_path="system_identification/dnn_model_south_temperature.h5"
-        west_model_path="system_identification/dnn_model_west_temperature.h5"
-        SOC_dnn = self.SOC_dnn_tensorflow()
-        power_dnn = self.power_dnn_tensorflow()
+        # Check if model paths were provided
+        if hasattr(self, 'model_paths'):
+            core_model_path = self.model_paths['core']
+            east_model_path = self.model_paths['east']
+            north_model_path = self.model_paths['north']
+            south_model_path = self.model_paths['south']
+            west_model_path = self.model_paths['west']
+            SOC_model_path = self.model_paths['SOC']
+            power_model_path = self.model_paths['power']
+        else:
+            core_model_path="system_identification/dnn_model_core_temperature.h5"
+            east_model_path="system_identification/dnn_model_east_temperature.h5"
+            north_model_path="system_identification/dnn_model_north_temperature.h5"
+            south_model_path="system_identification/dnn_model_south_temperature.h5"
+            west_model_path="system_identification/dnn_model_west_temperature.h5"
+            SOC_model_path="system_identification/dnn_SOC_model.h5"
+            power_model_path="system_identification/dnn_power_model.h5"
+        SOC_dnn = self.SOC_dnn_tensorflow(SOC_model_path)
+        power_dnn = self.power_dnn_tensorflow(power_model_path)
         core_temp_dnn = self.temp_dnn_tensorflow(core_model_path)
         east_temp_dnn = self.temp_dnn_tensorflow(east_model_path)
         north_temp_dnn = self.temp_dnn_tensorflow(north_model_path)
@@ -811,7 +835,11 @@ class mpc_case():
     def get_core_temp_pred(self, u): # need to implement autoerror
         """Get predicted temperature of core zone using optimal control inputs
         """
-        core_model_path="system_identification/dnn_model_core_temperature.h5"
+        # Check if model paths were provided
+        if hasattr(self, 'model_paths'):
+            core_model_path = self.model_paths['core']
+        else:
+            core_model_path="system_identification/dnn_model_core_temperature.h5"
         core_temp_dnn = self.temp_dnn_tensorflow(core_model_path)
         Tz_pred = core_temp_dnn(ca.vertcat(u[0], self.states['Tz_core_his_meas'][0])) + self._autoerror['core']
         return Tz_pred
@@ -819,7 +847,11 @@ class mpc_case():
     def get_east_temp_pred(self, u):
         """Get predicted temperature of east zone using optimal control inputs
         """
-        east_model_path="system_identification/dnn_model_east_temperature.h5"
+        # Check if model paths were provided
+        if hasattr(self, 'model_paths'):
+            east_model_path = self.model_paths['east']
+        else:
+            east_model_path="system_identification/dnn_model_east_temperature.h5"
         east_temp_dnn = self.temp_dnn_tensorflow(east_model_path)
         Tz_pred = east_temp_dnn(ca.vertcat(u[0], self.states['Tz_east_his_meas'][0])) + self._autoerror['east']
         return Tz_pred
@@ -827,7 +859,11 @@ class mpc_case():
     def get_north_temp_pred(self, u):
         """Get predicted temperature of north zone using optimal control inputs
         """
-        north_model_path="system_identification/dnn_model_north_temperature.h5"
+                # Check if model paths were provided
+        if hasattr(self, 'model_paths'):
+            north_model_path = self.model_paths['north']
+        else:
+            north_model_path="system_identification/dnn_model_north_temperature.h5"
         north_temp_dnn = self.temp_dnn_tensorflow(north_model_path)
         Tz_pred = north_temp_dnn(ca.vertcat(u[0], self.states['Tz_north_his_meas'][0])) + self._autoerror['north']
         return Tz_pred
@@ -835,7 +871,11 @@ class mpc_case():
     def get_south_temp_pred(self, u):
         """Get predicted temperature of south zone using optimal control inputs
         """
-        south_model_path="system_identification/dnn_model_south_temperature.h5"
+                # Check if model paths were provided
+        if hasattr(self, 'model_paths'):
+            south_model_path = self.model_paths['south']
+        else:
+            south_model_path="system_identification/dnn_model_south_temperature.h5"
         south_temp_dnn = self.temp_dnn_tensorflow(south_model_path) 
         Tz_pred = south_temp_dnn(ca.vertcat(u[0], self.states['Tz_south_his_meas'][0])) + self._autoerror['south']
         return Tz_pred
@@ -843,7 +883,11 @@ class mpc_case():
     def get_west_temp_pred(self, u):
         """Get predicted temperature of west zone using optimal control inputs
         """
-        west_model_path="system_identification/dnn_model_west_temperature.h5"
+        # Check if model paths were provided
+        if hasattr(self, 'model_paths'):
+            west_model_path = self.model_paths['west']
+        else:
+            west_model_path="system_identification/dnn_model_west_temperature.h5"
         west_temp_dnn = self.temp_dnn_tensorflow(west_model_path)
         Tz_pred = west_temp_dnn(ca.vertcat(u[0], self.states['Tz_west_his_meas'][0])) + self._autoerror['west']
         return Tz_pred
@@ -851,7 +895,12 @@ class mpc_case():
     def get_power_pred(self, u):
         """Get predicted power consumption
         """
-        power_dnn = self.power_dnn_tensorflow()
+        # Check if model paths were provided
+        if hasattr(self, 'model_paths'):
+            power_model_path = self.model_paths['power']
+        else:
+            power_model_path="system_identification/dnn_power_model.h5"
+        power_dnn = self.power_dnn_tensorflow(power_model_path)
         t = int((self.time%86400)/3600) # hour index 0~23           
         if t>=self.occ_start and t<self.occ_end:
             occupied = True
@@ -865,7 +914,11 @@ class mpc_case():
     def get_SOC_pred(self, u):
         """Get predicted SOC
         """
-        SOC_dnn = self.SOC_dnn_tensorflow()
+        if hasattr(self, 'model_paths'):
+            SOC_model_path = self.model_paths['SOC']
+        else:
+            SOC_model_path="system_identification/dnn_SOC_model.h5"
+        SOC_dnn = self.SOC_dnn_tensorflow(SOC_model_path)
         
         SOC = SOC_dnn(ca.vertcat(u[0], self.states['SOC_his_meas'][0])) # u[1], occupied, , self.states['Tz_ave_his_meas'][0]
 
@@ -883,10 +936,9 @@ class mpc_case():
         '''Softplus activation function: smooth approximation of ReLU'''
         return ca.log(1 + ca.exp(x))
 
-    def power_dnn_tensorflow(self):
+    def power_dnn_tensorflow(self, model_path="system_identification/dnn_power_model.h5"):
         '''Differentiable Neural Network model for total power consumption prediction
         '''
-        model_path="system_identification/dnn_power_model.h5"
         # Load the TensorFlow model
         tf_model = load_model(model_path)
         layers = tf_model.layers
@@ -962,10 +1014,9 @@ class mpc_case():
         # Finally, the CasADi function representing the neural network is returned.
         return nn_model_casadi
 
-    def SOC_dnn_tensorflow(self):
+    def SOC_dnn_tensorflow(self, model_path="system_identification/dnn_SOC_model.h5"):
         '''Differentiable Neural Network model for TES tank State-of-Charge TES prediction
         '''
-        model_path="system_identification/dnn_SOC_model.h5"
         # Load the TensorFlow model
         tf_model = load_model(model_path)
 

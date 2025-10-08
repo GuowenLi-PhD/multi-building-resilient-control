@@ -136,6 +136,8 @@ class BuildingAInterface(BaseBuilding):
             dos_attack_core_VAV=False  # Start in normal mode
         )
         
+        self.current_time = t_start  # Initialize current time
+        
         logger.info("✓ Building A initialized successfully")
     
     def step(self, aggregator_command: Optional[AggregatorCommand], dt: float) -> BuildingAState:
@@ -180,21 +182,30 @@ class BuildingAInterface(BaseBuilding):
             float(u_opt[9])   # V_west
         ]
         
-        # Apply controls to FMU
-        control_vars = [
-            'oveOnChiPla_u', 'conAHU_supFan_oveOnSupFan_u',
-            'oveTChiWatSupSet_u', 'oveTConWatSupSet_u',
-            'conAHU_oveTSupAir_u', 'conVAVCor_damVal_oveVDisSet_u',
-            'conVAVEas_damVal_oveVDisSet_u', 'conVAVNor_damVal_oveVDisSet_u',
-            'conVAVSou_damVal_oveVDisSet_u', 'conVAVWes_damVal_oveVDisSet_u'
+        # ============ Apply controls to FMU ============
+        # Based on run_mpc_v2.py structure: separate _u and _activate variables
+
+        # Define control variable names (without _u suffix)
+        control_var_names = [
+            'oveOnChiPla',
+            'conAHU_supFan_oveOnSupFan',
+            'oveTChiWatSupSet',
+            'oveTConWatSupSet',
+            'conAHU_oveTSupAir',
+            'conVAVCor_damVal_oveVDisSet',
+            'conVAVEas_damVal_oveVDisSet',
+            'conVAVNor_damVal_oveVDisSet',
+            'conVAVSou_damVal_oveVDisSet',
+            'conVAVWes_damVal_oveVDisSet'
         ]
-        
-        for var, val in zip(control_vars, uMPC):
-            self.fmu.set(var, val)
-        
-        # Activate all overrides
-        for var in control_vars:
-            self.fmu.set(var + '_activate', 1)
+
+        # Set control values (_u variables)
+        for var_name, val in zip(control_var_names, uMPC):
+            self.fmu.set(var_name + '_u', val)
+
+        # Activate all overrides (_activate variables)
+        for var_name in control_var_names:
+            self.fmu.set(var_name + '_activate', 1)
         
         # Simulate FMU
         ts = self.current_time
@@ -284,15 +295,46 @@ class BuildingAInterface(BaseBuilding):
         dic = {}
         for name in measurement_names:
             dic[name] = fmu_result[name][-1]
-        
         return pd.DataFrame(dic, index=[dic['time']])
     
     def _update_states(self, states, measurement, Tz_pred):
-        """Update MPC states"""
-        # Implementation similar to get_states() in run_mpc_v2.py
-        # ... (simplified for brevity)
+        """Update MPC states using FILO (First In Last Out)"""
+        
+        def FILO(a_list, x):
+            a_list.insert(0, x)
+            a_list.pop()
+            return a_list
+        
+        # Extract measurements (temperatures in Kelvin, convert to Celsius)
+        # Use .values[0] to access the first (and only) row by position
+        Tz_core = measurement['mod.flo.temAirPer5.T'].values[0] - 273.15
+        Tz_east = measurement['mod.flo.temAirEas.T'].values[0] - 273.15
+        Tz_north = measurement['mod.flo.temAirNor.T'].values[0] - 273.15
+        Tz_south = measurement['mod.flo.temAirSou.T'].values[0] - 273.15
+        Tz_west = measurement['mod.flo.temAirWes.T'].values[0] - 273.15
+        Toa = measurement['mod.TOut.y'].values[0] - 273.15
+        P = abs(measurement['mod.eleChi.y'].values[0]) + \
+            abs(measurement['mod.eleCHWP.y'].values[0]) + \
+            abs(measurement['mod.eleCT.y'].values[0]) + \
+            abs(measurement['mod.eleCWP.y'].values[0]) + \
+            abs(measurement['mod.eleSupFan.y'].values[0])
+        
+        # Update states
+        states['Tz_core_his_meas'] = FILO(states['Tz_core_his_meas'], Tz_core)
+        states['Tz_east_his_meas'] = FILO(states['Tz_east_his_meas'], Tz_east)
+        states['Tz_north_his_meas'] = FILO(states['Tz_north_his_meas'], Tz_north)
+        states['Tz_south_his_meas'] = FILO(states['Tz_south_his_meas'], Tz_south)
+        states['Tz_west_his_meas'] = FILO(states['Tz_west_his_meas'], Tz_west)
+        states['To_his_meas'] = FILO(states['To_his_meas'], Toa)
+        states['P_his_meas'] = FILO(states['P_his_meas'], P)
+        states['Tz_core_his_pred'] = FILO(states['Tz_core_his_pred'], Tz_pred['core'])
+        states['Tz_east_his_pred'] = FILO(states['Tz_east_his_pred'], Tz_pred['east'])
+        states['Tz_north_his_pred'] = FILO(states['Tz_north_his_pred'], Tz_pred['north'])
+        states['Tz_south_his_pred'] = FILO(states['Tz_south_his_pred'], Tz_pred['south'])
+        states['Tz_west_his_pred'] = FILO(states['Tz_west_his_pred'], Tz_pred['west'])
+        
         return states
-    
+
     def _calculate_comfort_violation(self, zone_temps: Dict[str, float]) -> float:
         """Calculate comfort violation in degree-hours"""
         T_upper = 26.0
