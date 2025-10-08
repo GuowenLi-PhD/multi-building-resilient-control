@@ -39,8 +39,10 @@ This framework implements a **three-layer hierarchical Model Predictive Control 
 # Python 3.8+
 pip install numpy pandas matplotlib pyyaml casadi pvlib
 pip install pyfmi tensorflow keras deap
+```
 
 ### Directory Structure
+```text
 connected_AB/
 ├── aggregator/          # Upper-level coordinator
 ├── buildings/           # Building interfaces
@@ -117,11 +119,10 @@ MIT License - See LICENSE file
 Contact
 
 Guowen Li: guowenli@tamu.edu
+```
 
 
----
-
-## **12. Final Setup Instructions**
+## Final Setup Instructions**
 
 ### **`connected_AB/setup.sh`** (Linux/Mac)
 ```bash
@@ -154,9 +155,10 @@ fi
 
 echo "✓ Setup complete!"
 echo "Run simulation with: python run_hierarchical_mpc.py"
-
+```
 
 ## AI Summary (Claude Sonnet 4.5 on 10/7/2025)
+```text
 🎉 COMPLETE HIERARCHICAL CONTROL FRAMEWORK DELIVERED!
 What You Got:
 
@@ -171,8 +173,6 @@ What You Got:
 ✅ Documentation - Complete README and setup scripts
 
 Next Steps:
-
-Copy all files to connected_AB/ folder
 Run setup: bash setup.sh (or manually create directories)
 Test simulation: python run_hierarchical_mpc.py --duration-days 1
 Analyze results: python analyze_results.py
@@ -184,3 +184,5 @@ Key Innovations:
 🔋 Strategic TES pre-charging before anticipated attacks
 ⚖️ Multi-objective optimization balancing comfort, energy, and resilience
 📡 Hierarchical coordination across different timescales (15min vs 60min)
+```
+
