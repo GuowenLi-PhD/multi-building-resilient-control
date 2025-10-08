@@ -1,0 +1,84 @@
+{
+  "metadata": {
+    "analysis_date": "2025-10-07 18:59:48",
+    "timestep_seconds": 900,
+    "simulation_duration_hours": 2424.0,
+    "attack_scenario": "DoS Attack on Core Zone VAV Box"
+  },
+  "energy_metrics": {
+    "energy_consumption": {
+      "nominal_kWh": 19490.057224414755,
+      "attack_kWh": 24954.77824741204,
+      "delta_kWh": 5464.721022997284,
+      "delta_percent": 28.038506814396374
+    },
+    "energy_cost": {
+      "nominal_$": 3215.674430327877,
+      "attack_$": 4121.661827112549,
+      "delta_$": 905.987396784672,
+      "delta_percent": 28.174102086954605
+    },
+    "peak_demand": {
+      "nominal_kW": 29.572187734426766,
+      "attack_kW": 27.852385666680178,
+      "delta_kW": -1.7198020677465884,
+      "delta_percent": -5.8156064853614575
+    }
+  },
+  "thermal_comfort_metrics": {
+    "unmet_degree_hours": {
+      "nominal_degC_h": 0.0,
+      "attack_degC_h": 44.29886179459038,
+      "delta_degC_h": 44.29886179459038,
+      "reduction_percent": 0
+    },
+    "max_violation": {
+      "nominal_degC": 0.0,
+      "attack_degC": 1.042127366368959,
+      "delta_degC": 1.042127366368959
+    },
+    "violation_time_percent": {
+      "nominal": 0.0,
+      "attack": 3.4653465346534658,
+      "delta": 3.4653465346534658
+    }
+  },
+  "control_performance_metrics": {
+    "control_smoothness_TV": {
+      "nominal": {
+        "T_chw": 11.953789279233035,
+        "T_cw": 8.386857028230338,
+        "T_sa": 18.34247867364911,
+        "V_core": 20.966364706480512,
+        "V_east": 2.1770954413591665
+      },
+      "attack": {
+        "T_chw": 5.721729521386294,
+        "T_cw": 4.801459251564097,
+        "T_sa": 12.795242666445631,
+        "V_core": 0.0715420315998265,
+        "V_east": 1.8752122838076797
+      },
+      "delta_percent": {
+        "T_chw": -52.134596087229966,
+        "T_cw": -42.750195509446705,
+        "T_sa": -30.242564845789705,
+        "V_core": -99.65877712898073,
+        "V_east": -13.866326290363293
+      }
+    }
+  },
+  "resilience_metrics": {
+    "resilience_score": 41.58844795568109,
+    "components": {
+      "comfort_maintenance": 0.0,
+      "energy_efficiency": 71.96149318560363,
+      "operational_continuity": 100.0
+    },
+    "weights": {
+      "comfort": 0.5,
+      "energy": 0.3,
+      "continuity": 0.2
+    }
+  }
+}
