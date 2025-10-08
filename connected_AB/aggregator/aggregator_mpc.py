@@ -81,15 +81,18 @@ class AggregatorMPC:
             - priority_A: Control priority for Building A
             - priority_B: Control priority for Building B
         """
-        
+        # Use minimum horizon based on available forecasts
+        effective_PH = min(self.PH, len(P_A_forecast), len(P_B_forecast), len(SOC_B_forecast))
+        print(f"🔍 Optimizing Aggregator MPC at t={current_time/3600/24:.2f}day with effective PH={effective_PH}")
+    
         ## Decision variables
         # P_A_ref[k], P_B_ref[k] for k=0 to PH-1
-        U = ca.MX.sym('U', 2 * self.PH)
+        U = ca.MX.sym('U', 2 * effective_PH)  # ✅ Change self.PH to effective_PH
         
         ## Objective function
         obj = 0
         
-        for k in range(self.PH):
+        for k in range(effective_PH):
             # Extract decision variables
             P_A_ref_k = U[2*k]
             P_B_ref_k = U[2*k + 1]
@@ -119,7 +122,7 @@ class AggregatorMPC:
         lbg = []
         ubg = []
         
-        for k in range(self.PH):
+        for k in range(effective_PH):
             P_A_ref_k = U[2*k]
             P_B_ref_k = U[2*k + 1]
             
@@ -139,16 +142,16 @@ class AggregatorMPC:
             ubg.append(self.P_feeder_max * 0.6)  # Building B max 60% of feeder
         
         ## Variable bounds
-        u_lb = [0.0, 0.0] * self.PH
-        u_ub = [self.P_feeder_max * 0.6, self.P_feeder_max * 0.6] * self.PH
+        u_lb = [0.0, 0.0] * effective_PH
+        u_ub = [self.P_feeder_max * 0.6, self.P_feeder_max * 0.6] * effective_PH
         
         ## Initial guess
         if attack_flag:
             # Under attack: Allow Building A more power, reduce Building B
-            u_init = [self.config.P_A_baseline_kW * 1.3, self.config.P_B_baseline_kW * 0.7] * self.PH
+            u_init = [self.config.P_A_baseline_kW * 1.3, self.config.P_B_baseline_kW * 0.7] * effective_PH
         else:
             # Normal: Balanced allocation
-            u_init = [self.config.P_A_baseline_kW, self.config.P_B_baseline_kW] * self.PH
+            u_init = [self.config.P_A_baseline_kW, self.config.P_B_baseline_kW] * effective_PH
         
         ## Solve
         nlp = {'x': U, 'f': obj, 'g': ca.vertcat(*g)}
@@ -164,8 +167,8 @@ class AggregatorMPC:
         
         ## Extract solution
         u_opt = res['x'].full().flatten()
-        P_A_ref_opt = [u_opt[2*k] for k in range(self.PH)]
-        P_B_ref_opt = [u_opt[2*k+1] for k in range(self.PH)]
+        P_A_ref_opt = [u_opt[2*k] for k in range(effective_PH)]
+        P_B_ref_opt = [u_opt[2*k+1] for k in range(effective_PH)]
         
         ## Determine SOC target for Building B
         if attack_anticipated:

@@ -41,11 +41,11 @@ def load_weather_data(weather_file: str, dt: float = 900.0):
     dat = read_epw(weather_file)
     
     # Extract hourly data
-    weather_hourly = dat[0][['temp_air', 'relative_humidity', 'ghi']]
+    weather_hourly = dat[0][['temp_air', 'relative_humidity', 'ghi']].copy()  # ✅ Add .copy()
     weather_hourly.columns = ['Toa', 'RHoa', 'GHI']
     
     # Convert RH to fraction
-    weather_hourly['RHoa'] = weather_hourly['RHoa'] / 100.0
+    weather_hourly['RHoa'] = weather_hourly['RHoa'] / 100.0  # ✅ Now safe
     
     # Create index (hours to seconds)
     index_h = np.arange(3600, 3600 * (len(weather_hourly) + 1), 3600)
