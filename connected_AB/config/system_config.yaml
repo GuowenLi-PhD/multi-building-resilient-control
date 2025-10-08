@@ -1,0 +1,61 @@
+# System-wide configuration for hierarchical control
+
+system:
+  name: "Multi-Building Resilient Control"
+  buildings: ["Building_A", "Building_B"]
+  
+# Feeder constraints
+feeder:
+  capacity_kW: 50.0
+  safety_margin: 0.9  # Use 90% of capacity
+  voltage_limits: [0.95, 1.05]  # per-unit
+
+# Temporal settings
+timing:
+  aggregator_timestep: 900  # 15 minutes (seconds)
+  building_a_timestep: 900  # 15 minutes
+  building_b_timestep: 3600 # 60 minutes
+  prediction_horizon_aggregator: 12  # steps (3 hours at 15-min)
+  prediction_horizon_building_a: 4   # steps (1 hour at 15-min)
+  prediction_horizon_building_b: 4   # steps (4 hours at 60-min)
+
+# Building A parameters
+building_a:
+  baseline_power_kW: 8.0
+  attack_power_spike_kW: 2.3
+  number_zones: 5
+  attack_vulnerable: true
+  
+# Building B parameters
+building_b:
+  baseline_power_kW: 12.0
+  TES_capacity_kWh: 1152.0
+  SOC_min: 0.20
+  SOC_max: 0.99
+  SOC_target_precharge: 0.90
+  discharge_rate_max_kW: 15.0
+  charge_rate_max_kW: 10.0
+
+# Attack detection
+detection:
+  method: "scheduled"  # Options: "scheduled", "predictive"
+  anticipation_hours: 3.0
+  confidence_threshold: 0.85
+
+# Control weights
+weights:
+  aggregator:
+    feeder_tracking: 100.0
+    comfort_priority: 50.0
+    power_balance: 10.0
+    TES_utilization: 5.0
+  
+  building_a_normal:
+    energy_cost: 1.0
+    comfort: 1.0
+    slew_rate: 100.0
+    
+  building_a_attack:
+    energy_cost: 0.0
+    comfort: 100.0
+    slew_rate: 10.0
