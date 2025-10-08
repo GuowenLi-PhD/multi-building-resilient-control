@@ -41,7 +41,7 @@ pip install numpy pandas matplotlib pyyaml casadi pvlib
 pip install pyfmi tensorflow keras deap
 ```
 
-### Directory Structure
+## Directory Structure
 ```text
 connected_AB/
 ├── aggregator/          # Upper-level coordinator
@@ -51,32 +51,31 @@ connected_AB/
 ├── config/              # Configuration files
 ├── results/             # Generated outputs
 └── run_hierarchical_mpc.py  # Main entry point
+```
 
-Quick Start
-1. Run Simulation
+## Quick Start
+### 1. Run Simulation
 bashcd connected_AB
 python run_hierarchical_mpc.py --start-day 212 --duration-days 2
-2. Analyze Results
+### 2. Analyze Results
 bashpython analyze_results.py
-3. View Outputs
+### 3. View Outputs
 Results are saved in results/:
-
 metrics_YYYYMMDD_HHMMSS.csv - Time-series data
 messages_YYYYMMDD_HHMMSS.json - Communication logs
 summary_YYYYMMDD_HHMMSS.txt - Performance summary
 plots/ - Visualizations
 
-Configuration
-System Parameters (config/system_config.yaml)
+## Configuration
+### System Parameters (config/system_config.yaml)
 Key parameters:
-
 Feeder capacity: 50 kW (default)
 Aggregator timestep: 15 minutes
 Building A PH: 4 steps (1 hour)
 Building B PH: 4 steps (4 hours)
 TES capacity: 1,152 kWh
 
-Attack Scenarios (config/attack_scenarios.yaml)
+### Attack Scenarios (config/attack_scenarios.yaml)
 Define cyber-attack schedules:
 yaml- name: "DoS_Attack_Core_VAV_Morning"
   target: "Building_A"
@@ -84,45 +83,53 @@ yaml- name: "DoS_Attack_Core_VAV_Morning"
     - start_day: 1
       start_hour: 9
       duration_hours: 4
-Control Strategy
-Normal Operation
 
+## Control Strategy
+Normal Operation
 Building A: Balances energy cost and comfort
 Building B: Optimizes TES charging/discharging for cost savings
 Aggregator: Maintains feeder utilization < 90%
 
 Under Attack
-
 Building A: Switches to Adaptive MPC (comfort priority, energy cost ignored)
 Building B: Discharges TES to compensate for Building A's power spike
 Aggregator: Reallocates power budgets dynamically
 
-Expected Performance
+## Expected Performance
 Based on validation with Building A standalone:
-MetricNormalUnder AttackChangeBuilding A Power8.0 kW10.3 kW+28.1%Building A Comfort Violations23.7 °C·h5.6 °C·h-76.3%Building B SOC0.60.3-0.3 (discharging)Feeder Utilization40%45%+5%
-Troubleshooting
+| Metric                       | Normal   | Under Attack | Change              |
+|------------------------------|----------|--------------|---------------------|
+| Building A Power             | 8.0 kW   | 10.3 kW      | **+28.1%**          |
+| Building A Comfort Violations| 23.7 °C·h| 5.6 °C·h     | **-76.3%**          |
+| Building B SOC               | 0.6      | 0.3          | -0.3 (discharging)  |
+| Feeder Utilization           | 40%      | 45%          | **+5%**             |
+
+
+## Troubleshooting
 Issue: IPOPT fails to find solution
 Fix: Increase max_iter in aggregator_mpc.py
 Issue: FMU initialization fails
 Fix: Set Dymola license path: os.environ["DYMOLA_RUNTIME_LICENSE"] = "..."
 Issue: DEAP solver too slow
 Fix: Reduce population size or generations in mpc_dnn.py
-Citation
+
+## Citation
 If you use this framework, please cite:
+```text
 @article{li2025multibuilding,
   title={Hierarchical Multi-Building Resilient Control for Cyber-Physical Energy Systems},
   author={Li, Guowen and Fu, Yangyang and O'Neill, Zheng},
   year={2025}
 }
+```
 License
 MIT License - See LICENSE file
 Contact
 
 Guowen Li: guowenli@tamu.edu
-```
 
 
-## Final Setup Instructions**
+## Final Setup Instructions
 
 ### **`connected_AB/setup.sh`** (Linux/Mac)
 ```bash
