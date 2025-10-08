@@ -1,13 +1,1 @@
-{
-  "energy": 127.60994051555801,
-  "energy_cost": 30.950157368458278,
-  "max_temp_violation": 1.6502754894898999,
-  "total_temp_violation": 22.659729078287285,
-  "core_Zone_temp_violation": 1.5749995332346174,
-  "east_Zone_temp_violation": 3.4979985443797545,
-  "north_Zone_temp_violation": 2.002245988584818,
-  "south_Zone_temp_violation": 8.715512644516778,
-  "west_Zone_temp_violation": 6.868972367571317,
-  "high_price_period_load": 117.81955440560887,
-  "low_price_period_load": 9.79038610994914
-}
+{"energy": 44.78167686536787, "energy_cost": 11.245842948726565, "max_temp_violation": 0.6686248072128933, "total_temp_violation": 5.026123204483071, "core_Zone_temp_violation": 0.12568811569599347, "east_Zone_temp_violation": 0.9251491241033278, "north_Zone_temp_violation": 0.2608403980909628, "south_Zone_temp_violation": 2.435775011139569, "west_Zone_temp_violation": 1.2786705554532176, "high_price_period_load": 39.92863638018457, "low_price_period_load": 4.853040485183308}
