@@ -29,12 +29,12 @@ building_a:
 # Building B parameters
 building_b:
   baseline_power_kW: 12.0
-  TES_capacity_kWh: 1152.0
+  TES_capacity_kWh: 1152.0    # Trane model 1082C: 3,105 L of water per tank, when fully frozen, the ice has a cooling capacity of 274 kWh
   SOC_min: 0.20
   SOC_max: 0.99
   SOC_target_precharge: 0.90
-  discharge_rate_max_kW: 15.0
-  charge_rate_max_kW: 10.0
+  discharge_rate_max_kW: 15.0 # need to double check with TES model
+  charge_rate_max_kW: 10.0    # need to double check with TES model
 
 # Attack detection
 detection:

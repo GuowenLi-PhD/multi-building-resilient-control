@@ -1,0 +1,39 @@
+================================================================================
+HIERARCHICAL MULTI-BUILDING CONTROL - PERFORMANCE SUMMARY
+================================================================================
+
+SIMULATION INFO
+--------------------------------------------------------------------------------
+Duration: 23.8 hours
+Timesteps: 96
+Attack periods: 36 timesteps
+
+BUILDING A (Victim)
+--------------------------------------------------------------------------------
+Total energy: 122.13 kWh
+Average power: 5.09 kW
+Peak power: 11.94 kW
+Total comfort violations: 34.16 °C·h
+Attack periods power: 9.73 kW
+Normal periods power: 2.31 kW
+
+BUILDING B (Support with TES)
+--------------------------------------------------------------------------------
+Total energy: 57.24 kWh
+Average power: 2.38 kW
+Peak power: 9.57 kW
+Average SOC: 0.36
+Min SOC: 0.21
+Total comfort violations: 24.70 °C·h
+
+FEEDER STATUS
+--------------------------------------------------------------------------------
+Average utilization: 14.9%
+Peak utilization: 38.7%
+Violations: 0 timesteps
+Average margin: 42.53 kW
+
+RESILIENCE METRICS
+--------------------------------------------------------------------------------
+Building A comfort degradation during attack: 61.7%
+Building A power increase during attack: 322.0%
