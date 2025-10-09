@@ -144,7 +144,7 @@ class MetricsCollector:
                 f.write(f"Building A power increase during attack: {power_increase_A:.1f}%\n")
                 
                 SOC_utilization = df[~df['attack_active']]['SOC_B'].mean() - df[df['attack_active']]['SOC_B'].mean()
-                f.write(f"Building B TES utilization (ΔSOC): {SOC_utilization:.2f}\n")
+                f.write(f"Building B TES utilization (Delta SOC): {SOC_utilization:.2f}\n")
             
             f.write("\n" + "="*80 + "\n")
         
