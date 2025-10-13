@@ -2,7 +2,7 @@
 
 ## Overview
 
-This framework implements a **three-layer hierarchical Model Predictive Control (MPC)** system for coordinating multiple buildings to achieve cyber-resilience and grid-interactive operation.
+This framework implements a **two-layer hierarchical Model Predictive Control (MPC)** system for coordinating multiple buildings to achieve cyber-resilience and grid-interactive operation.
 
 ### System Architecture
 ```text
