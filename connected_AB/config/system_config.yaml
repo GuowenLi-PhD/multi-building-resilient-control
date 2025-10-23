@@ -15,7 +15,7 @@ timing:
   aggregator_timestep: 900  # 15 minutes (seconds)
   building_a_timestep: 900  # 15 minutes
   building_b_timestep: 3600 # 60 minutes
-  prediction_horizon_aggregator: 12  # steps (3 hours at 15-min)
+  prediction_horizon_aggregator: 20  # steps (4 hours at 15-min)
   prediction_horizon_building_a: 4   # steps (1 hour at 15-min)
   prediction_horizon_building_b: 4   # steps (4 hours at 60-min)
 
