@@ -829,8 +829,30 @@ class mpc_case():
             #print("fval_sum:", fval_sum)
             
         print("total objectives:", sum(fval))
+        
+        # Calculate comfort violation (degree-hours)
+        comfort_violations = []
+        violation_k = 0.0
+        for k in range(len(u_opt_ph)):
+            violation_k += max(0, Tz_core_pred_ph - self.T_upper) + max(0, self.T_lower - Tz_core_pred_ph)
+            violation_k += max(0, Tz_east_pred_ph - self.T_upper) + max(0, self.T_lower - Tz_east_pred_ph)
+            violation_k += max(0, Tz_north_pred_ph - self.T_upper) + max(0, self.T_lower - Tz_north_pred_ph)
+            violation_k += max(0, Tz_south_pred_ph - self.T_upper) + max(0, self.T_lower - Tz_south_pred_ph)
+            violation_k += max(0, Tz_west_pred_ph - self.T_upper) + max(0, self.T_lower - Tz_west_pred_ph)
+        comfort_violations.append(violation_k * self.dt / 3600.0)
 
-        return(P_pred_ph, SOC_pred_ph, Tz_core_pred_ph, Tz_east_pred_ph, Tz_north_pred_ph, Tz_south_pred_ph, Tz_west_pred_ph)    
+        return{
+            'P_pred [W]': P_pred_ph,
+            'total_energy_cost [kWh]': sum([price_ph[k] * P_pred_ph[k] * self.dt/3600./1000. for k in range(len(u_opt_ph))]),
+            'SOC_pred': SOC_pred_ph,
+            'Tz_core_pred [C]': Tz_core_pred_ph, 
+            'Tz_east_pred [C]': Tz_east_pred_ph,
+            'Tz_north_pred [C]': Tz_north_pred_ph,
+            'Tz_south_pred [C]': Tz_south_pred_ph,
+            'Tz_west_pred [C]': Tz_west_pred_ph,
+            'comfort_violation [C*hour]': comfort_violations,
+            'total_comfort_violation [C*hour]': sum(comfort_violations)
+        }  
                 
     def get_core_temp_pred(self, u): # need to implement autoerror
         """Get predicted temperature of core zone using optimal control inputs

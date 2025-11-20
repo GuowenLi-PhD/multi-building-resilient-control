@@ -508,6 +508,11 @@ class mpc_case():
         return {
             'P_pred [W]': P_pred_ph,
             'total_energy_cost [kWh]': sum([price_ph[k] * P_pred_ph[k] * self.dt/3600./1000. for k in range(len(u_opt_ph))]),
+            'Tz_core_pred [C]': Tz_core_pred_ph, 
+            'Tz_east_pred [C]': Tz_east_pred_ph,
+            'Tz_north_pred [C]': Tz_north_pred_ph,
+            'Tz_south_pred [C]': Tz_south_pred_ph,
+            'Tz_west_pred [C]': Tz_west_pred_ph,
             'comfort_violation [C*hour]': comfort_violations,
             'total_comfort_violation [C*hour]': sum(comfort_violations)
         }
