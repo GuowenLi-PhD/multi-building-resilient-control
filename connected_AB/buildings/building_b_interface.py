@@ -26,7 +26,7 @@ if parent_dir not in sys.path:
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../buildingB_w_TES'))
 
 from pyfmi import load_fmu
-from mpc_dnn import mpc_case
+from mpc_b import mpc_case
 from buildings.base_building import BaseBuilding
 from communication.data_models import (
     BuildingState, BuildingBState, AggregatorCommand,
@@ -167,7 +167,7 @@ class BuildingBInterface(BaseBuilding):
             
             if priority == 'precharge':
                 # Encourage charging
-                self.mpc.w = [0.5, 1000., 2000.]  # Reduce energy cost weight, increase SOC penalty
+                self.mpc.w = [0., 0., 2000.]  # Reduce energy cost weight, increase SOC penalty
                 logger.info("🔋 Building B: Pre-charging mode activated")
                 
             elif priority == 'support_A':

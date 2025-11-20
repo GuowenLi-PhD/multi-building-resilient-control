@@ -26,7 +26,7 @@ if parent_dir not in sys.path:
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../buildingA_wo_TES'))
 
 from pyfmi import load_fmu
-from mpc_v2 import mpc_case
+from mpc_a import mpc_case
 from buildings.base_building import BaseBuilding
 from communication.data_models import (
     BuildingState, BuildingAState, AggregatorCommand,
