@@ -1,0 +1,79 @@
+# System Configuration for Schedule-Based Multi-Building Control
+# Author: Guowen Li, AI Assistant
+# Date: 2025-01-20
+
+# Feeder parameters
+feeder:
+  capacity_kW: 50.0          # Total feeder capacity
+  safety_margin: 0.9         # 90% of capacity for safety
+  
+# Building A configuration
+building_a:
+  baseline_power_kW: 8.0
+  prediction_horizon_steps: 4      # Default: 4 steps @ 15 min = 1 hour
+  control_interval_minutes: 15     # Default control interval
+  
+  # Comfort bounds
+  comfort:
+    T_lower: 20.0  # °C
+    T_upper: 25.0  # °C
+  
+  # MPC weights (when variables not scheduled)
+  mpc_weights:
+    energy_cost: 1.0
+    comfort: 1000.0
+    slack: 10000.0
+  
+  # Variable bounds
+  bounds:
+    bcp: [0, 1]        # Binary
+    bahu: [0, 1]       # Binary
+    Tchw: [5, 10]      # °C
+    Tcw: [15.6, 29.4]      # °C
+    Tsa: [11.8, 18]      # °C
+    Vcore: [0, 2.8]      # Air flow rate
+    Veast: [0, 0.9]
+    Vnorth: [0, 0.95]
+    Vsouth: [0, 0.95]
+    Vwest: [0, 0.7]
+    epsilon: [0, 1.0]  # Slack
+
+# Building B configuration  
+building_b:
+  baseline_power_kW: 12.0
+  prediction_horizon_steps: 16     # Default: 16 steps @ 1 hour = 16 hours
+  control_interval_minutes: 60     # Default control interval
+  
+  # TES parameters
+  tes:
+    mIce_max_kg: 15525.0  # 3105 kg/zone * 5 zones
+    SOC_initial: 0.5
+    SOC_target: 0.5
+    capacity_kWh: 1152.0  # Total TES capacity
+  
+  # Comfort bounds
+  comfort:
+    T_lower: 20.0  # °C
+    T_upper: 25.0  # °C
+  
+  # MPC weights (when mode not scheduled)
+  mpc_weights:
+    energy_cost: 1.0
+    comfort: 1000.0
+    SOC_tracking: 1000.0
+  
+  # Variable bounds
+  bounds:
+    uMod: [-1, 2]  # TES mode: -1, 0, 1, 2
+
+# Simulation parameters
+simulation:
+  weather_file: '../buildingA_wo_TES/weather_data/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw'
+  start_day: 212      # August 1st (day of year)
+  duration_days: 2    # Default simulation duration
+  
+# Logging
+logging:
+  level: 'INFO'
+  save_detailed: true
+  save_interval_minutes: 15

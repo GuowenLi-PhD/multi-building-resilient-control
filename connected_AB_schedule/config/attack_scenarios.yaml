@@ -1,0 +1,31 @@
+# Attack Scenarios Configuration
+# Define cyber-attack events for resilience testing
+# Author: Guowen Li, AI Assistant
+# Date: 2025-01-20
+
+attacks:
+  # Attack 1: VAV Re-initialization on Building A
+  - name: "VAV Re-initialization Attack"
+    target_building: "Building_A"
+    start_day: 212.5      # Day 212, 12:00 (noon on first day)
+    start_hour: 12.0      # Hour 12 (noon)
+    duration_hours: 6.0   # 6-hour attack
+    type: "vav_reinitialization"
+    affected_variables: ["Vcore", "Veast", "Vnorth", "Vsouth", "Vwest"]
+    params:
+      reinitialization_value: 0.0  # Force all VAV dampers to closed position
+      attack_interval_minutes: 15   # Re-initialize every 15 minutes
+  
+  # Attack 2: Supply Air Temperature Manipulation
+  - name: "Supply Air Temp Manipulation"
+    target_building: "Building_A"
+    start_day: 213.5      # Day 213, 12:00 (noon on second day)  
+    start_hour: 36.0      # Hour 36 from simulation start (noon on second day)
+    duration_hours: 4.0   # 4-hour attack
+    type: "setpoint_manipulation"
+    affected_variables: ["Tsa"]
+    params:
+      manipulated_value: 18.0  # Force high supply air temp (reduced cooling)
+
+# Note: Empty affected_variables list means no attack
+# If no attacks desired, use: attacks: []

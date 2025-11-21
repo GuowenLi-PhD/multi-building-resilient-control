@@ -1,0 +1,16 @@
+# Scenario 1: Stand-alone MPC (No Coordination)
+# Each building uses its own MPC optimization without coordination
+# Author: Guowen Li, AI Assistant
+# Date: 2025-01-20
+
+scenario_name: "Stand-alone MPC (No Coordination)"
+
+# Building A: Minimal schedule - let MPC optimize everything
+building_a:
+  control_interval_minutes: 15  # 15-minute control interval
+  schedule: []  # Empty schedule = full MPC optimization for all 11 variables
+
+# Building B: Minimal schedule - let MPC optimize everything  
+building_b:
+  control_interval_minutes: 60  # 1-hour control interval
+  schedule: []  # Empty schedule = full MPC optimization for TES mode
