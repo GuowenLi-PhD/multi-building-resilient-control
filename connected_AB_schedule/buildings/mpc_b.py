@@ -35,7 +35,7 @@ class mpc_case():
         self.predictor = predictor # price and outdoor air temperature for the future horizons
         self.states = states # dictionary
         self.number_zones = 5 # 5 zones
-        self.occ_start = 6 # occupancy starts
+        self.occ_start = 7 # occupancy starts
         self.occ_end = 19 # occupancy ends
         self.T_upper = np.array([30.0 for i in range(24)]) # zone temperature bounds - need check with the high-fidelty model
         self.T_upper[self.occ_start:self.occ_end] = 25.0

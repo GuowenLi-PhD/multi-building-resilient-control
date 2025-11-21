@@ -73,7 +73,7 @@ Examples:
     parser.add_argument('--start-day', type=int, default=212,
                        help='Simulation start day (day of year, 1-365)')
     
-    parser.add_argument('--duration', type=int, default=2,
+    parser.add_argument('--duration', type=int, default=1,
                        help='Simulation duration (days)')
     
     parser.add_argument('--output', type=str, default='results',

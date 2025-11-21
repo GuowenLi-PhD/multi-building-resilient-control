@@ -154,7 +154,7 @@ class mpc_case():
 
         # zone temperature bounds - need check with the high-fidelty model
         T_upper = np.array([30.0 for i in range(24)])
-        T_upper[self.occ_start:self.occ_end] = 24.0 # used to be 26.0, HIL for 24.0 C
+        T_upper[self.occ_start:self.occ_end] = 25.0 # used to be 26.0, HIL for 24.0 C, simulation demonstration for 25.0 C
         T_lower = np.array([18.0 for i in range(24)])
         T_lower[self.occ_start:self.occ_end] = 20.0 # 22.0
 
@@ -283,8 +283,8 @@ class mpc_case():
                     u_lb += [1, 1, 5, 15.6, 11.8, 0.23, 0.05, 0.05, 0.05, 0.04, 0.00]  # lower bound of zonal air flow rate is not zero because of minimum ventilation requirement
                     u_ub += [1, 1, 10, 29.4, 18, 2.80, 0.90, 0.95, 0.95, 0.70, 0.10]                     
             else:
-              u_lb += [0, 0, 5, 20, 11.8, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00] 
-              u_ub += [0, 0, 10, 20, 18, 0.01, 0.01, 0.01, 0.01, 0.01, 0.10]
+              u_lb += [0, 0, 10, 20, 18, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00] 
+              u_ub += [0, 0, 10, 20, 18, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
               
             # inequality constraints
             eps = U[self.number_inputs*k+10] # eps: slack variable

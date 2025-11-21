@@ -22,31 +22,31 @@ building_a:
       controls:
         bcp: 1      # Chiller on
         bahu: 1     # AHU on
-        Tsa: 12.5   # Aggressive pre-cooling
+        #Tsa: 12.5   # Aggressive pre-cooling
     
     # Morning: Occupied period starts
     - time: "08:00"
       controls:
         bcp: 1      # Chiller on
         bahu: 1     # AHU on
-        Tsa: 13.0   # Moderate cooling
+        #Tsa: 13.0   # Moderate cooling
     
     # Midday: Peak demand period
     - time: "12:00"
       controls:
         bcp: 1      # Chiller on
         bahu: 1     # AHU on
-        Tsa: 14.0   # Reduce cooling intensity to lower peak demand
+        #Tsa: 14.0   # Reduce cooling intensity to lower peak demand
     
     # Afternoon: Post-peak
     - time: "16:00"
       controls:
         bcp: 1      # Chiller on
         bahu: 1     # AHU on
-        Tsa: 13.5   # Resume normal cooling
+        #Tsa: 13.5   # Resume normal cooling
     
     # Evening: Unoccupied period starts
-    - time: "18:00"
+    - time: "19:00"
       controls:
         bcp: 0      # Chiller off
         bahu: 0     # AHU off
@@ -67,22 +67,22 @@ building_b:
       controls:
         uMod: 0     # TES off, building coast
     
-    # Late morning: Chiller only
-    - time: "09:00"
+    # Late morning
+    - time: "07:00"
       controls:
-        uMod: 2     # Chiller only (no TES)
+        uMod: 1     
     
     # Peak hours: Discharge TES to reduce building demand and support grid
     - time: "13:00"
       controls:
         uMod: 1     # Discharge TES
     
-    # Late afternoon: Back to chiller only
+    # Late afternoon
     - time: "17:00"
       controls:
-        uMod: 2     # Chiller only
+        uMod: 1
     
     # Evening: Prepare for next day
-    - time: "20:00"
+    - time: "19:00"
       controls:
         uMod: 0     # Off

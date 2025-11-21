@@ -8,7 +8,28 @@ scenario_name: "Stand-alone MPC (No Coordination)"
 # Building A: Minimal schedule - let MPC optimize everything
 building_a:
   control_interval_minutes: 15  # 15-minute control interval
-  schedule: []  # Empty schedule = full MPC optimization for all 11 variables
+  #schedule: []  # Empty schedule = full MPC optimization for all 11 variables
+
+  # Daily schedule - MPC will optimize unscheduled variables
+  schedule:
+    # Night hours: Systems off to save energy
+    - time: "00:00"
+      controls:
+        bcp: 0      # Chiller off
+        bahu: 0     # AHU off
+    
+    # Early morning: Pre-cooling preparation
+    - time: "07:00"
+      controls:
+        bcp: 1      # Chiller on
+        bahu: 1     # AHU on
+        #Tsa: 12.5   # Aggressive pre-cooling
+    
+    # Evening: Unoccupied period starts
+    - time: "19:00"
+      controls:
+        bcp: 0      # Chiller off
+        bahu: 0     # AHU off
 
 # Building B: Minimal schedule - let MPC optimize everything  
 building_b:
