@@ -44,12 +44,12 @@ building_b:
   prediction_horizon_steps: 16     # Default: 16 steps @ 1 hour = 16 hours
   control_interval_minutes: 60     # Default control interval
   
-  # TES parameters
+  # TES parameters (Trane model 1082C: 274 kWh per tank, 3.1 m3 water volume per tank; peak cooling power 56 kW); Building peak cooling load 99 kW
   tes:
-    mIce_max_kg: 9315.0  # 3105 kg per tank * 5 tanks
+    mIce_max_kg: 6210  # 3105 kg per tank * 2 tanks
     SOC_initial: 0.5
     SOC_target: 0.5
-    capacity_kWh: 1920  # Total TES capacity 1152 kWh for 5 tanks
+    capacity_kWh: 548  # Total TES capacity 548 kWh for 2 tanks, discharging duration 5.5 hours at 99 kW building peak cooling load
   
   # Comfort bounds
   comfort:

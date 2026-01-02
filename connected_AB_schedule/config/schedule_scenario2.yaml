@@ -70,7 +70,7 @@ building_b:
     # Late morning
     - time: "07:00"
       controls:
-        uMod: 1     
+        uMod: 2     
     
     # Peak hours: Discharge TES to reduce building demand and support grid
     - time: "13:00"
