@@ -62,15 +62,20 @@ building_b:
       controls:
         uMod: -1    # Charge TES
     
-    # Morning: Coast on stored energy
-    - time: "06:00"
-      controls:
-        uMod: 0     # TES off, building coast
+    # # Morning: Coast on stored energy
+    # - time: "06:00"
+    #   controls:
+    #     uMod: 0     # TES off, building coast
     
-    # Late morning
+    # Early morning
     - time: "07:00"
       controls:
         uMod: 2     
+
+    # Late morning
+    - time: "07:00"
+      controls:
+        uMod: 1    
     
     # Peak hours: Discharge TES to reduce building demand and support grid
     - time: "13:00"

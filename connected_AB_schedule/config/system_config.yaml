@@ -4,7 +4,7 @@
 
 # Feeder parameters
 feeder:
-  capacity_kW: 40.0          # Total feeder capacity
+  capacity_kW: 30.0          # Total feeder capacity
   safety_margin: 0.9         # 90% of capacity for safety
   
 # Building A configuration
@@ -46,10 +46,10 @@ building_b:
   
   # TES parameters (Trane model 1082C: 274 kWh per tank, 3.1 m3 water volume per tank; peak cooling power 56 kW); Building peak cooling load 99 kW
   tes:
-    mIce_max_kg: 6210  # 3105 kg per tank * 2 tanks
+    mIce_max_kg: 12420.0  # 3105 kg per tank * 2 tanks
     SOC_initial: 0.5
     SOC_target: 0.5
-    capacity_kWh: 548  # Total TES capacity 548 kWh for 2 tanks, discharging duration 5.5 hours at 99 kW building peak cooling load
+    capacity_kWh: 1096.0  # Total TES capacity 548 kWh for 2 tanks, discharging duration 5.5 hours at 99 kW building peak cooling load
   
   # Comfort bounds
   comfort:

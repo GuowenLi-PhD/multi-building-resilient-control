@@ -1,0 +1,29 @@
+================================================================================
+SCENARIO COMPARISON REPORT
+================================================================================
+
+Scenario 1: Stand-alone MPC (No Coordination)
+Scenario 2: User Coordinated Control
+
+ENERGY CONSUMPTION
+--------------------------------------------------------------------------------
+Energy difference: +25.05 kWh (+8.5%)
+Energy savings: -25.05 kWh
+
+THERMAL COMFORT
+--------------------------------------------------------------------------------
+Comfort difference: -5.59 °C·h (-20.1%)
+Comfort improvement: 5.59 °C·h
+
+FEEDER METRICS
+--------------------------------------------------------------------------------
+Average utilization difference: +3.5%
+Peak utilization difference: -10.5%
+Violations difference: +0 timesteps
+Stability improvement: +14.8%
+
+COST
+--------------------------------------------------------------------------------
+Cost savings: $-3.76
+
+================================================================================
