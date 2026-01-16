@@ -1,0 +1,8 @@
+metric_key,description,baseline,proposed,pct_change_%
+viol_hours,Feeder limit violation hours (lower better),2.0,0.0,-99.99999994999999
+exceed_energy_kWh,Feeder exceedance energy (kWh) (lower better),3.344071667680164,0.0,-99.99999997009633
+agg_P_total_kW_std_kW,Aggregate feeder power std (kW) (lower better),10.260568007459218,8.73916548315083,-14.827663761441709
+agg_P_total_kW_mean_abs_ramp_kW_per_h,Mean abs ramp rate (kW/h) (lower better),3.3945535014891246,2.336332472597602,-31.174086020902624
+A_unmet_degree_hours_sum,Building A unmet degree-hours sum (lower better),0.00847962804772262,0.0,-99.9999882070313
+B_unmet_degree_hours_sum,Building B unmet degree-hours sum (lower better),5.841370699062015,4.828639026614852,-17.33722655945139
+TES_soc_swing,TES SOC swing (context-dependent),0.3210157921493684,0.3893117404367732,21.274949627050518
