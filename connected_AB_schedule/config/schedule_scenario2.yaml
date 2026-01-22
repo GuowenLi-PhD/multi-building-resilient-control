@@ -17,15 +17,15 @@ building_a:
         bcp: 0      # Chiller off
         bahu: 0     # AHU off
     
-    # Early morning: Pre-cooling preparation
-    - time: "05:00"
-      controls:
-        bcp: 1      # Chiller on
-        bahu: 1     # AHU on
-        #Tsa: 12.5   # Aggressive pre-cooling
+    # # Early morning: Pre-cooling preparation
+    # - time: "05:00"
+    #   controls:
+    #     bcp: 1      # Chiller on
+    #     bahu: 1     # AHU on
+    #     #Tsa: 12.5   # Aggressive pre-cooling
     
     # Morning: Occupied period starts
-    - time: "08:00"
+    - time: "07:00"
       controls:
         bcp: 1      # Chiller on
         bahu: 1     # AHU on
