@@ -1,145 +1,61 @@
-# =============================================================================
-# Connected AB — Hierarchical MPC System Configuration
-# =============================================================================
-# Two-building community: Building A (AHU-VAV-Chiller) + Building B (HVAC-TES)
-# Hybrid rule-based / log-utility aggregator coordination
-# =============================================================================
+# System Configuration for Hierarchical Multi-Building Control
 
-# ── Simulation timing ───────────────────────────────────────────────────────
-timing:
-  start_day: 212                    # TMY3 calendar day (July 31)
-  duration_days: 1                  # Simulation length
-  dt_building_a: 900.0              # Building A timestep [s]  (15 min)
-  dt_building_b: 3600.0             # Building B timestep [s]  (1 hr)
-  dt_aggregator: 900.0              # Aggregator timestep [s]  (15 min)
-  prediction_horizon_a: 4           # Building A PH [steps]    (= 1 hr)
-  control_horizon_a: 4              # Building A CH [steps]
-  prediction_horizon_b: 16          # Building B PH [steps]    (= 16 hr)
-  prediction_horizon_agg: 4         # Aggregator PH [steps]    (= 1 hr)
+system:
+  name: "Multi-Building Hierarchical Control with Log-Utility Aggregator"
+  buildings: ["Building_A", "Building_B"]
 
-# ── Feeder constraints ──────────────────────────────────────────────────────
+# Feeder constraints
 feeder:
   capacity_kW: 50.0
-  safety_margin: 0.90               # P_max = 50 * 0.90 = 45 kW
-  power_margin_kW: 2.0              # Headroom inside allocation
+  safety_margin: 0.95  # Use 95% of capacity
 
-# ── Aggregator settings ─────────────────────────────────────────────────────
-aggregator:
-  alpha_threshold_enter: 0.30       # α ≥ 0.30  → enter ATTACK mode
-  alpha_threshold_exit:  0.15       # α <  0.15 → begin hysteresis exit
-  hysteresis_steps: 4               # Consecutive low-α steps to fully exit
+# Timing parameters
+timing:
+  aggregator_timestep: 3600  # 1 hour (seconds)
+  building_a_timestep: 900   # 15 minutes
+  building_b_timestep: 3600  # 1 hour
+  
+  # Prediction horizons (steps)
+  prediction_horizon_aggregator: 20  # 20 hours
+  prediction_horizon_building_a: 4   # 1 hour @ 15-min
+  prediction_horizon_building_b: 4   # 4 hours @ 1-hr
 
-  gamma_buffer: 0.05                # 5 % headroom on Bldg-A baseline (normal)
+# Priority weights for log-utility aggregator
+# Higher value = higher priority in allocation
+priorities:
+  Building_A: 1  # Victim building without TES
+  Building_B: 2  # Flexible building with TES
 
-  # Log-utility optimisation weights (attack mode)
-  w_feeder:  100.0
-  w_comfort:  50.0
-  w_balance:  10.0
-  w_tes:       5.0
-
-  # Attack multipliers β(θ) — allow Bldg-A to draw more power
-  attack_multipliers:
-    0: 1.00    # Normal
-    1: 1.15    # Fault detected
-    2: 1.25    # Attack confirmed
-    3: 1.40    # Critical
-
-# ── Building A — Adaptive MPC (CasADi / IPOPT) ─────────────────────────────
+# Building A parameters (no TES)
 building_a:
-  n_zones: 5
-  zone_names: [core, east, north, south, west]
+  baseline_power_kW: 8.0
+  flexibility_factor: 0.3  # Can vary ±30%
 
-  # 11 decision variables
-  n_inputs: 11
-  input_names: [bcp, bahu, Tchw, Tcw, Tsa,
-                Vcore, Veast, Vnorth, Vsouth, Vwest, epsilon]
-  u_lower: [0, 0,  5.0, 15.6, 11.8, 0.23, 0.05, 0.05, 0.05, 0.04, 0.0]
-  u_upper: [1, 1, 10.0, 29.4, 18.0, 4.50, 0.90, 0.95, 0.95, 0.70, 0.1]
-  u_init:  [0, 0, 10.0, 23.0, 18.0, 0.23, 0.05, 0.05, 0.05, 0.04, 0.01]
-
-  # Comfort bounds [°C]
-  Tz_min_occ: 21.0
-  Tz_max_occ: 24.0
-  Tz_min_unocc: 15.0
-  Tz_max_unocc: 30.0
-  occ_start_hour: 7
-  occ_end_hour: 19
-
-  # Nominal MPC weights [w_cost, w_slack, w_slew]
-  w_nominal: [1.0, 1.0, 100.0]
-
-  # Adaptive weights by priority θ
-  w_comfort_by_priority: {0: 1.0, 1: 10.0, 2: 100.0, 3: 1000.0}
-  w_cost_by_priority:    {0: 10.0, 1: 1.0, 2: 0.1, 3: 0.0}
-
-  # Power model coefficients (used by mock plant only)
-  P_base_kW: 5.0                    # Baseload when chiller on
-  P_fan_coeff: 2.0                  # kW per (m³/s total airflow)
-  P_cool_coeff: 0.8                 # kW per °C of cooling
-  P_standby_kW: 0.5                 # Power when chiller off
-
-  fmu_path: null
-  surrogate_dir: null
-
-# ── Building B — TES-based MPC (DEAP / GA) ─────────────────────────────────
+# Building B parameters (with TES)
 building_b:
-  n_zones: 5
-  zone_names: [core, east, north, south, west]
-  modes: [-1, 0, 1, 2]
-  mode_names: [charge, off, discharge, chiller_only]
+  baseline_power_kW: 12.0
+  TES_capacity_kWh: 1152.0
+  SOC_min: 0.20
+  SOC_max: 0.99
+  charge_rate_max_kW: 10.0
+  discharge_rate_max_kW: 15.0
 
-  tes_capacity_kWh: 100.0
-  soc_min: 0.05
-  soc_max: 0.95
-  soc_initial: 0.50
-  charge_rate_kW: 15.0              # Power draw when charging
-  discharge_rate_kW: 3.0            # Pump power when discharging
-  chiller_power_kW: 12.0            # Power when in chiller-only mode
-  standby_power_kW: 2.0             # Standby power
-  roundtrip_efficiency: 0.90
+# Control weights
+weights:
+  # Building A
+  building_a:
+    energy_cost: 1.0
+    comfort: 100.0
+    budget_constraint: 10.0
+    mu_bar: 5.0  # Slack normalization
+  
+  # Building B  
+  building_b:
+    energy_cost: 1.0
+    comfort: 100.0
+    TES_operation: 0.1
+    budget_constraint: 10.0
+    mu_bar: 8.0
 
-  soc_target_by_hour:
-    off_peak: 0.70
-    daytime:  0.50
-    evening:  0.40
-
-  # Comfort bounds [°C]  (same as Building A for simplicity)
-  Tz_min_occ: 21.0
-  Tz_max_occ: 24.0
-  Tz_min_unocc: 15.0
-  Tz_max_unocc: 30.0
-  occ_start_hour: 7
-  occ_end_hour: 19
-
-  w_cost: 10.0
-  w_support: 50.0
-  w_soc: 5.0
-
-  fmu_path: null
-  surrogate_dir: null
-
-# ── Attack schedule ─────────────────────────────────────────────────────────
-#    start_time_s is ABSOLUTE seconds:  day * 86400 + hour * 3600
-#    Day 212, 12:00 noon  =  212 * 86400 + 43200  =  18360000
-attacks:
-  - name: "DoS on Core-Zone VAV"
-    target: building_a
-    type: dos_vav_reinit
-    start_time_s: 18360000           # Day 212, 12:00
-    duration_s: 7200                 # 2 hours
-    affected_zone: core
-
-# ── Electricity pricing ─────────────────────────────────────────────────────
-pricing:
-  type: tou
-  off_peak_rate: 0.05
-  mid_peak_rate: 0.10
-  on_peak_rate:  0.20
-  off_peak_hours: [0,1,2,3,4,5,6,7]
-  mid_peak_hours: [8,9,10,11,18,19,20,21]
-  on_peak_hours:  [12,13,14,15,16,17]
-
-# ── Output ──────────────────────────────────────────────────────────────────
-output:
-  results_dir: results
-  log_level: INFO
+# Attack scenarios path
+attack_scenarios_path: 'config/attack_scenarios.yaml'

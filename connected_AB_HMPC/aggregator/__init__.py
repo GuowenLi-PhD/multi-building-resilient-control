@@ -1,6 +1,11 @@
-"""Aggregator layer of the hierarchical MPC framework."""
+"""Aggregator module for hierarchical control"""
 
-from .aggregator_mpc import AggregatorMPC
-from .attack_manager import AttackManager
+from .aggregator_log_utility import LogUtilityAggregator, LogUtilityAggregatorConfig
+from .attack_anticipator import AttackAnticipator, AttackPrediction
 
-__all__ = ["AggregatorMPC", "AttackManager"]
+__all__ = [
+    'LogUtilityAggregator',
+    'LogUtilityAggregatorConfig',
+    'AttackAnticipator',
+    'AttackPrediction'
+]

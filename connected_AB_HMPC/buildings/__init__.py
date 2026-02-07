@@ -1,6 +1,11 @@
-"""Building-level controllers for the hierarchical MPC framework."""
+"""Buildings module"""
 
-from .building_a_wrapper import BuildingAWrapper
-from .building_b_wrapper import BuildingBWrapper
+from .base_building import BaseBuilding
+from .building_a_simple import BuildingASimple
+from .building_b_simple import BuildingBSimple
 
-__all__ = ["BuildingAWrapper", "BuildingBWrapper"]
+__all__ = [
+    'BaseBuilding',
+    'BuildingASimple',
+    'BuildingBSimple'
+]

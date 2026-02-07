@@ -1,0 +1,43 @@
+# Predefined cyber-attack scenarios
+
+scenarios:
+  - name: "DoS_Attack_Core_VAV_Morning"
+    description: "Device reinitialization attack on Building A core zone VAV during morning peak"
+    target: "Building_A"
+    attack_type: "DoS_Device_Reinitialization"
+    affected_component: "Core_Zone_VAV"
+    schedule:
+      - start_day: 1
+        start_hour: 9
+        duration_hours: 4
+        severity: "high"
+        
+  - name: "DoS_Attack_Core_VAV_Afternoon"
+    description: "Extended DoS attack during afternoon peak pricing"
+    target: "Building_A"
+    attack_type: "DoS_Device_Reinitialization"
+    affected_component: "Core_Zone_VAV"
+    schedule:
+      - start_day: 1
+        start_hour: 14
+        duration_hours: 5
+        severity: "high"
+        
+  - name: "Repeated_Attacks_Multi_Day"
+    description: "Daily recurring attacks over 3 days"
+    target: "Building_A"
+    attack_type: "DoS_Device_Reinitialization"
+    affected_component: "Core_Zone_VAV"
+    schedule:
+      - start_day: 1
+        start_hour: 10
+        duration_hours: 3
+        severity: "medium"
+      - start_day: 2
+        start_hour: 14
+        duration_hours: 4
+        severity: "high"
+      - start_day: 3
+        start_hour: 8
+        duration_hours: 2
+        severity: "low"

@@ -1,17 +1,36 @@
-"""Communication protocol for the hierarchical MPC framework."""
+"""Communication module for hierarchical control"""
 
-from .messages import (
-    AllocationResult,
-    BuildingAStatus,
-    BuildingBStatus,
-    CommandToA,
-    CommandToB,
+from .data_models import (
+    FlexibilityBand,
+    PowerBudget,
+    BuildingAllocation,
+    BuildingState,
+    BuildingAState,
+    BuildingBState,
+    MPCResult,
+    TwoPassMPCResult,
+    FeederStatus,
+    AttackEvent,
+    SimulationMetrics,
+    BuildingStatus,
+    ControlMode
 )
 
+from .message_protocol import MessageBroker
+
 __all__ = [
-    "AllocationResult",
-    "BuildingAStatus",
-    "BuildingBStatus",
-    "CommandToA",
-    "CommandToB",
+    'FlexibilityBand',
+    'PowerBudget',
+    'BuildingAllocation',
+    'BuildingState',
+    'BuildingAState',
+    'BuildingBState',
+    'MPCResult',
+    'TwoPassMPCResult',
+    'FeederStatus',
+    'AttackEvent',
+    'SimulationMetrics',
+    'BuildingStatus',
+    'ControlMode',
+    'MessageBroker'
 ]
