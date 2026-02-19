@@ -331,7 +331,14 @@ class BuildingAScheduler(BaseScheduleBuilding):
             'west': measurement['mod.flo.temAirWes.T'].values[0] - 273.15
         }
         
-        
+        zone_airflows = {
+            'core': measurement['mod.conVAVCor.VDis_flow'].values[0],
+            'east': measurement['mod.conVAVEas.VDis_flow'].values[0],
+            'north': measurement['mod.conVAVNor.VDis_flow'].values[0],
+            'south': measurement['mod.conVAVSou.VDis_flow'].values[0],
+            'west': measurement['mod.conVAVWes.VDis_flow'].values[0]
+        }
+                
         comfort_violation = self._calculate_comfort_violation(zone_temps, dt)
         
         # 10. Return state
@@ -340,6 +347,7 @@ class BuildingAScheduler(BaseScheduleBuilding):
             'building_id': 'Building_A',
             'power_kW': power_actual / 1000.0,
             'zone_temps': zone_temps,
+            'zone_airflows': zone_airflows,
             'comfort_violation_degCh': comfort_violation,
             'controls_applied': final_controls,
             'scheduled_vars': list(scheduled_vars.keys()) if scheduled_vars else [],

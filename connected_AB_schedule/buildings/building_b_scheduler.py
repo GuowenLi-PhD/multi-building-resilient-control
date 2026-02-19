@@ -258,6 +258,14 @@ class BuildingBScheduler(BaseScheduleBuilding):
             'west': measurement['conVAVWes.TZon'].values[0] - 273.15
         }
         
+        zone_airflows = {
+            'core': measurement['conVAVCor.VDis_flow'].values[0],
+            'east': measurement['conVAVEas.VDis_flow'].values[0],
+            'north': measurement['conVAVNor.VDis_flow'].values[0],
+            'south': measurement['conVAVSou.VDis_flow'].values[0],
+            'west': measurement['conVAVWes.VDis_flow'].values[0]
+        }
+                
         comfort_violation = self._calculate_comfort_violation(zone_temps, dt)
         
         # 12. Return state
@@ -266,6 +274,7 @@ class BuildingBScheduler(BaseScheduleBuilding):
             'building_id': 'Building_B',
             'power_kW': power_actual / 1000.0,
             'zone_temps': zone_temps,
+            'zone_airflows': zone_airflows,
             'comfort_violation_degCh': comfort_violation,
             'SOC': self.SOC_current,
             'TES_mode': uMod,
@@ -283,6 +292,7 @@ class BuildingBScheduler(BaseScheduleBuilding):
             'time', 'TOut.y', 'weaBus.HGloHor', 'uMod', 'iceTan.SOC',
             'conVAVCor.TZon', 'conVAVEas.TZon', 'conVAVNor.TZon',
             'conVAVSou.TZon', 'conVAVWes.TZon', 'ave.y',
+            'conVAVCor.VDis_flow', 'conVAVEas.VDis_flow', 'conVAVNor.VDis_flow', 'conVAVSou.VDis_flow', 'conVAVWes.VDis_flow',
             'chi.P', 'priPum.P', 'secPum.P', 'fanSup.P'
         ]
         

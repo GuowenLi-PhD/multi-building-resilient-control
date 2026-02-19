@@ -45,6 +45,11 @@ class MetricsCollector:
             'T_north_A': building_a_state['zone_temps']['north'],
             'T_south_A': building_a_state['zone_temps']['south'],
             'T_west_A': building_a_state['zone_temps']['west'],
+            'V_core_A': building_a_state['zone_airflows']['core'],
+            'V_east_A': building_a_state['zone_airflows']['east'],
+            'V_north_A': building_a_state['zone_airflows']['north'],
+            'V_south_A': building_a_state['zone_airflows']['south'],
+            'V_west_A': building_a_state['zone_airflows']['west'],
             'scheduled_vars_A': ','.join(building_a_state.get('scheduled_vars', [])),
             'under_attack_A': building_a_state.get('under_attack', False),
             
@@ -64,6 +69,11 @@ class MetricsCollector:
             'T_north_B': building_b_state['zone_temps']['north'],
             'T_south_B': building_b_state['zone_temps']['south'],
             'T_west_B': building_b_state['zone_temps']['west'],
+            'V_core_B': building_b_state['zone_airflows']['core'],
+            'V_east_B': building_b_state['zone_airflows']['east'],
+            'V_north_B': building_b_state['zone_airflows']['north'],
+            'V_south_B': building_b_state['zone_airflows']['south'],
+            'V_west_B': building_b_state['zone_airflows']['west'],
             'scheduled_vars_B': ','.join(building_b_state.get('scheduled_vars', [])),
             'under_attack_B': building_b_state.get('under_attack', False),
             
